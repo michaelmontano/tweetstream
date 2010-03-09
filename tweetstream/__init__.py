@@ -10,9 +10,13 @@ import urllib
 import urllib2
 import socket
 import time
-import cjson
 import base64
-
+try:
+    import cjson
+    HAS_CJSON = True
+except ImportError:
+    import anyjson
+    HAS_CJSON = False
 
 """
  .. data:: URLS
@@ -177,7 +181,10 @@ class TweetStream(object):
                 elif data.isspace():
                     continue
 
-                data = cjson.decode(data, all_unicode=True)
+                if HAS_CJSON:
+                    data = cjson.decode(data, all_unicode=True)
+                else:
+                    data = anyjson.deserialize(data)
                 self.count += 1
                 self._rate_cnt += 1
                 return data
