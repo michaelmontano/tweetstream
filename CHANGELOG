@@ -1,0 +1,24 @@
+0.1
+
+ - Initial version
+
+0.2
+
+ - Improved error handling
+ - Added AuthenticationError and ConnectionError exceptions
+ - Added ReconnectingTweetStream class that supports automatically
+   reconnecting if the connection is dropped
+
+0.3
+
+ - Fixed bugs in authtentication
+ - Added TrackStream and FollowStream classes
+ - Added list of endpoint names, and made them legal values for the url arg
+
+0.3.1
+
+ - Added lots of tests
+ - Added proper handling of keepalive newlines
+ - Improved handling of closing streams
+ - Added missing anyjson dependency to setup
+ - Fixed bug where newlines and malformed content were counted as a tweet  
