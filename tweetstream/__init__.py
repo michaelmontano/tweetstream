@@ -10,7 +10,7 @@ import urllib
 import urllib2
 import socket
 import time
-import anyjson
+import cjson
 
 
 """
@@ -24,13 +24,13 @@ import anyjson
 
 """
 
-URLS = {"firehose": "http://stream.twitter.com/firehose.json",
-        "gardenhose": "http://stream.twitter.com/gardenhose.json",
-        "spritzer": "http://stream.twitter.com/spritzer.json",
-        "birddog": "http://stream.twitter.com/birddog.json",
-        "shadow": "http://stream.twitter.com/shadow.json",
-        "follow": "http://stream.twitter.com/follow.json",
-        "track": "http://stream.twitter.com/track.json"}
+URLS = {"firehose": "http://stream.twitter.com/1/statuses/firehose.json",
+        "gardenhose": "http://stream.twitter.com/1/statuses/sample.json",
+        "spritzer": "http://stream.twitter.com/1/statuses/sample.json",
+        "birddog": "http://stream.twitter.com/1/statuses/filter.json",
+        "shadow": "http://stream.twitter.com/1/statuses/filter.json",
+        "follow": "http://stream.twitter.com/1/statuses/filter.json",
+        "track": "http://stream.twitter.com/1/statuses/filter.json"}
 
 USER_AGENT = "TweetStream %s" % __version__
 
@@ -179,7 +179,7 @@ class TweetStream(object):
                 elif data.isspace():
                     continue
 
-                data = anyjson.deserialize(data)
+                data = cjson.decode(data, all_unicode=True)
                 self.count += 1
                 self._rate_cnt += 1
                 return data
