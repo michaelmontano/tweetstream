@@ -11,6 +11,7 @@ import urllib2
 import socket
 import time
 import cjson
+import base64
 
 
 """
@@ -128,14 +129,11 @@ class TweetStream(object):
 
     def _init_conn(self):
         """Open the connection to the twitter server"""
-        headers = {'User-Agent': self.user_agent}
+        basic_auth = 'Basic %s' % base64.encodestring('%s:%s' % (self._username, self._password))[:-1]
+        headers = {'User-Agent': self.user_agent, 'Authorization' : basic_auth}
         req = urllib2.Request(self.url, self._get_post_data(), headers)
 
-        password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
-        password_mgr.add_password(None, self.url, self._username,
-                                  self._password)
-        handler = urllib2.HTTPBasicAuthHandler(password_mgr)
-        opener = urllib2.build_opener(handler)
+        opener = urllib2.build_opener()
 
         try:
             self._conn = opener.open(req)
