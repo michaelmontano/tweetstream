@@ -112,7 +112,7 @@ class TweetStream(object):
         self._rate_cnt = 0
         self._username = username
         self._password = password
-        self._decode = True
+        self._decode = decode
 
         self.rate_period = 10 # in seconds
         self.connected = False
