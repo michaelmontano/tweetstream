@@ -106,12 +106,13 @@ class TweetStream(object):
         :attr: `USER_AGENT`.
 """
 
-    def __init__(self, username, password, url="spritzer"):
+    def __init__(self, username, password, url="spritzer", decode=True):
         self._conn = None
         self._rate_ts = None
         self._rate_cnt = 0
         self._username = username
         self._password = password
+        self._decode = True
 
         self.rate_period = 10 # in seconds
         self.connected = False
@@ -181,10 +182,11 @@ class TweetStream(object):
                 elif data.isspace():
                     continue
 
-                if HAS_CJSON:
-                    data = cjson.decode(data, all_unicode=True)
-                else:
-                    data = anyjson.deserialize(data)
+                if self._decode:
+                    if HAS_CJSON:
+                        data = cjson.decode(data, all_unicode=True)
+                    else:
+                        data = anyjson.deserialize(data)
                 self.count += 1
                 self._rate_cnt += 1
                 return data
@@ -230,12 +232,13 @@ class ReconnectingTweetStream(TweetStream):
     """
 
     def __init__(self, username, password, url="spritzer",
-                 reconnects=3, error_cb=None, retry_wait=5):
+                 reconnects=3, error_cb=None, retry_wait=5,
+                 decode=True):
         self.max_reconnects = reconnects
         self.retry_wait = retry_wait
         self._reconnects = 0
         self._error_cb = error_cb
-        TweetStream.__init__(self, username, password, url=url)
+        TweetStream.__init__(self, username, password, url=url, decode=decode)
 
     def next(self):
         while True:
